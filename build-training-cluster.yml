@@ -60,7 +60,6 @@
       register: ec2
       with_items:
         - "{{ SUBNET1 }}"
-        - "{{ SUBNET2 }}"
 
     - name: Add public ip to nodes
       add_host:

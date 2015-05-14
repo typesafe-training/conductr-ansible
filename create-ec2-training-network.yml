@@ -23,24 +23,19 @@
           - subnets:
               - 10.0.1.0/24
               - 10.0.2.0/24
-              - 10.0.3.0/24
             routes:
               - dest: 0.0.0.0/0
                 gw: igw
         subnets:
           - cidr: 10.0.1.0/24
-            az: "{{ EC2_REGION }}a"
-            resource_tags:
-               Name: "ConductR {{ EC2_REGION }}a SN"
-          - cidr: 10.0.2.0/24
             az: "{{ EC2_REGION }}b"
             resource_tags:
-                Name: "ConductR {{ EC2_REGION }}b SN"
-            # Use 'a' again should region only have 2 AZs
-          - cidr: 10.0.3.0/24
-            az: "{{ EC2_REGION }}a"
+               Name: "ConductR {{ EC2_REGION }}b SN"
+          - cidr: 10.0.2.0/24
+            az: "{{ EC2_REGION }}c"
             resource_tags:
-                Name: "ConductR {{ EC2_REGION }}a SN"
+                Name: "ConductR {{ EC2_REGION }}c SN"
+            # Use 'b' again should region only have 2 AZs
         state: present
       register: vpc
 
@@ -134,6 +129,6 @@
 
     - name: Create vars file
       template:
-        src: templates/vars.j2
-        dest: "vars/{{ EC2_REGION }}_vars.yml"
+        src: templates/training-vars.j2
+        dest: "vars/training-{{ EC2_REGION }}_vars.yml"
 

@@ -1,9 +1,6 @@
 ---
-- name: Install add-apt-repostory
+- name: Install add-apt-repository
   apt: name=software-properties-common state=latest update_cache=yes
-
-- name: Add HAProxy Repository
-  apt_repository: repo='ppa:vbernat/haproxy-1.5'
 
 - name: Install HAProxy
   apt: name=haproxy state=latest

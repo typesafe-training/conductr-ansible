@@ -1,14 +1,14 @@
 ---
 - name: Copy ConductR
-  copy: src={{ CONDUCTR_PKG }} dest=/home/ubuntu
+  copy: src={{ CONDUCTR_PKG }} dest=/home/admin
   
 - name: Install ConductR
-  apt: deb=/home/ubuntu/{{ CONDUCTR_PKG }}
+  apt: deb=/home/admin/{{ CONDUCTR_PKG }}
 
 - name: Install Conductr-Haproxy
   apt: deb=/usr/share/conductr/extra/{{ CONDCUTR_HAPROXY_PKG }}
 
-- command: rm /home/ubuntu/{{ CONDUCTR_PKG }}
+- command: rm /home/admin/{{ CONDUCTR_PKG }}
 
 - name: Setup Python, Pip
   apt: name={{ item }} state=latest
@@ -66,14 +66,15 @@
             state=started
 
 - name: Get instance id
-  get_url: url=http://169.254.169.254/latest/meta-data/instance-id dest=/home/ubuntu/instance-id.txt
+  get_url: url=http://169.254.169.254/latest/meta-data/instance-id dest=/home/admin/instance-id.txt
 
-- shell: "cat /home/ubuntu/instance-id.txt"
+- shell: "cat /home/admin/instance-id.txt"
   register: instanceid
 
 - debug: msg="Instance id -- {{ instanceid.stdout }}"
 
 - name: Register with ELB
+  sudo: false
   local_action:
     module: ec2_elb
     instance_id: "{{ instanceid.stdout }}"

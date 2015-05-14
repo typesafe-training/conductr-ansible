@@ -1,21 +1,19 @@
 ---
 # Must be set to the key pair name
 # of the file passed to playbook
-KEYPAIR: "Key Pair Name"
+KEYPAIR: "typesafe-training"
 # This image is Ubuntu 14.04 LTS in us-east-1
 # Must set to region local Ubuntu AMI for other regions
-IMAGE: "ami-76b2a71e"
-REMOTE_USER: "ubuntu"
-INSTANCE_TYPE: "t2.medium"
+IMAGE: "ami-7c797514"
+REMOTE_USER: "admin"
+INSTANCE_TYPE: "t2.small"
 EC2_REGION: "{{ EC2_REGION }}"
 NODE_SECURITY_GROUP: "{{ node_sg.group_id }}"
 AZ_SEED: "{{ vpc.subnets[0].az }}"
 SUBNET_SEED: "{{ vpc.subnets[0].id }}"
 AZ_SN1: "{{ vpc.subnets[1].az }}"
 SUBNET1: "{{ vpc.subnets[1].id }}"
-AZ_SN2: "{{ vpc.subnets[2].az }}"
-SUBNET2: "{{ vpc.subnets[2].id }}"
 ELB: "{{ elb.elb.name }}"
-TAG_NAME: "ConductR - Beta 3"
-CONDUCTR_PKG: "conductr_1.0.0-b3_all.deb"
+TAG_NAME: "training-services"
+CONDUCTR_PKG: "conductr_0.1.0_all.deb"
 CONDCUTR_HAPROXY_PKG: "conductr-haproxy_0.1.0_all.deb"

@@ -3,9 +3,9 @@
 These plays and playbooks provision [Typesafe ConductR](https://conductr.typesafe.com) cluster nodes in AWS EC2 using [Ansible](http://www.ansible.com).
 
 Use create-network-ec2.yml to setup a new VPC and create your cluster in the new VPC. You only need to provide your access keys and what region to execute in.
-The playbook outputs a vars file for use with the build-cluster-ec.yml.
+The playbook outputs a vars file for use with the bbuild-training-cluster.yml.
 
-The playbook build-cluster-ec2.yml launches three instances across two availability zones. ConductR is installed on all instances and configured to form a cluster. The nodes are registered with a load balancer. This playbook can be used with new or existing VPCs.
+The playbook bbuild-training-cluster.yml launches two instances across two availability zones. ConductR is installed on all instances and configured to form a cluster. The nodes are registered with a load balancer. This playbook can be used with new or existing VPCs.
 
 ## Prerequisites
 
@@ -44,25 +44,25 @@ export ANSIBLE_HOST_KEY_CHECKING=False
 Runing the create network play without any arguments defaults to executing in the EC2 region of us-east-1.
 
 ```bash
-ansible-playbook create-network-ec2.yml
+ansible-playbook create-ec2-training-network.yml
 ```
 
 Optionally specify what [EC2 region](http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region) you want to execute in as `EC2_REGION` using a -e key value pair. For example to execute in eu-west-1: 
 
 ```bash
-ansible-playbook create-network-ec2.yml -e "EC2_REGION=eu-west-1"
+ansible-playbook create-ec2-training-network.yml -e "EC2_REGION=eu-west-1"
 ```
 
 The create network playbook produces a vars file in the `vars` folder named `{{EC2_REGION}}_vars.yml` where {{EC2_REGION}} is the region used. You **must** add the name of your key pair to `{{EC2_REGION}}_vars.yml` in order to use it with the build cluster script. Change the "Key Pair Name" of `KEYPAIR: "Key Pair Name"` to that of the key pair name, which may be different than the file name and generally does not end in the .pem file extension.
 
-If you want to execute in a region other than us-east-1, you will also need to change the AMI value for `IMAGE` in your vars file to an Ubuntu image in that region. The AMI listed is the Ubuntu 14.04 LTS HVM EBS boot image published by Canonical for us-east-1. Other versions and types of Ubuntu instances are expected to work. The [Ubuntu AMI Locator](http://cloud-images.ubuntu.com/locator/ec2/) can help you find AMI's for alternative regions and instance types.
+If you want to execute in a region other than us-east-1, you will also need to change the AMI value for `IMAGE` in your vars file to an Debian image in that region.
 
 We pass both our vars file and EC2 PEM key to our playbook as command line arguments. The VARS_FILE template can be the one created from the create script. There is also a `vars.yml` template you can use instead. The private-key value must be the local path and filename of the keypair that has the key pair name `KEYPAIR` specified in the vars file. For example our key pair may be named `ConductR_Key` in AWS and reside locally as `~/secrets/ConductR.pem`. In which case we would set `KEYPAIR` to `ConductR_Key` and pass `~/secrets/ConductR.pem` as our private-key argument.
 
 All the nodes will be assigned a public ip address so you can ssh into nodes using the specified PEM key with the user name from REMOTE_USER in `vars/main.yml`. 
 
 ```bash
-ansible-playbook build-cluster-ec2.yml -e "VARS_FILE=vars/{{EC2_REGION}}_vars.yml" --private-key /path/to/{{keypair}}
+ansible-playbook build-training-cluster.yml -e "VARS_FILE=vars/{{EC2_REGION}}_vars.yml" --private-key /path/to/{{keypair}}
 ```
 
 ## Accessing cluster applications
